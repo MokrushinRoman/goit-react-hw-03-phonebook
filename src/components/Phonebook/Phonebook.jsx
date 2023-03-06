@@ -2,8 +2,6 @@ import { Component } from 'react';
 import { BiXCircle } from 'react-icons/bi';
 import PropTypes from 'prop-types';
 
-import { errorNotification } from 'helpers';
-
 import {
     PhonebookForm,
     Label,
@@ -15,13 +13,6 @@ import { Box } from 'components/Box';
 
 export class Phonebook extends Component {
     static propTypes = {
-        existedContacts: PropTypes.arrayOf(
-            PropTypes.exact({
-                id: PropTypes.string,
-                name: PropTypes.string,
-                number: PropTypes.string,
-            }).isRequired
-        ).isRequired,
         addContact: PropTypes.func.isRequired,
     };
 
@@ -44,18 +35,8 @@ export class Phonebook extends Component {
         const { name: newName, number } = this.state;
         e.preventDefault();
 
-        if (this.dublicateFinder(newName)) {
-            errorNotification(newName);
-        } else {
-            this.props.addContact(newName, number);
-            this.formReset();
-        }
-    };
-
-    dublicateFinder = newName => {
-        return this.props.existedContacts.some(
-            ({ name }) => name.toLowerCase() === newName.toLowerCase()
-        );
+        this.props.addContact(newName, number);
+        this.formReset();
     };
 
     formReset = () => {

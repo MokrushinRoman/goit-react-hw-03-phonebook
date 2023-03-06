@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
-
 import { Box } from '../Box';
 import { Title, Contacts, Phonebook, Filter } from 'components';
+import { errorNotification } from 'helpers';
 
 const initialContacts = [
     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -40,6 +40,10 @@ export class App extends Component {
     }
 
     addContact = (name, number) => {
+        if (this.dublicateFinder(name)) {
+            return errorNotification(name);
+        }
+
         const newContact = {
             id: nanoid(),
             name,
@@ -53,7 +57,9 @@ export class App extends Component {
 
     dublicateFinder = newName => {
         const { contacts } = this.state;
-        contacts.some(({ name }) => name === newName);
+        return contacts.some(
+            ({ name }) => name.toLowerCase() === newName.toLowerCase()
+        );
     };
 
     onFilterChange = e => {
